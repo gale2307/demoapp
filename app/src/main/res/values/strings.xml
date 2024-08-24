@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">demoapp</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_create_event">CreateEventActivity</string>
+    <string name="large_text">hi</string>
+    <string-array name="sports_array">
+        <item>Tennis</item>
+        <item>Swimming</item>
+        <item>Basketball</item>
+    </string-array>
+    <string name="action_settings">Settings</string>
 </resources>
