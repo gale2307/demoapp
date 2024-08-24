@@ -17,6 +17,8 @@ public class Room {
     private @ServerTimestamp Date startDate;
     private @ServerTimestamp Date endDate;
 
+    public Room() {}
+
     public Room(String uid, String title, String description, Date startDate, Date endDate) {
         this.uid = uid;
         this.title = title;
@@ -95,5 +97,20 @@ public class Room {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "uid='" + uid + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", sportsCategory=" + sportsCategory +
+                ", lat=" + lat +
+                ", lng=" + lng +
+                ", geohash='" + geohash + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                '}';
     }
 }

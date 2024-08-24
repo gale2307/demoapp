@@ -12,6 +12,8 @@ public class User {
     private String uid;
     private List<String> rooms;
 
+    public User() {}
+
     public User(String uid, List<String> rooms) {
         this.uid = uid;
         this.rooms = rooms;
@@ -31,5 +33,13 @@ public class User {
 
     public void setRooms(List<String> rooms) {
         this.rooms = rooms;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "uid='" + uid + '\'' +
+                ", rooms=" + rooms +
+                '}';
     }
 }
