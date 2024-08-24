@@ -2,6 +2,7 @@ package syncshack2024.sydney.edu.au.demoapp.model;
 
 import com.google.firebase.firestore.ServerTimestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import syncshack2024.sydney.edu.au.demoapp.enums.SportsCategory;
@@ -16,6 +17,9 @@ public class Room {
     private String geohash;
     private @ServerTimestamp Date startDate;
     private @ServerTimestamp Date endDate;
+    private int maxParticipants;
+    private ArrayList<String> participants;
+    private String host;
 
     public Room() {}
 
@@ -99,6 +103,30 @@ public class Room {
         this.endDate = endDate;
     }
 
+    public int getMaxParticipants() {
+        return maxParticipants;
+    }
+
+    public void setMaxParticipants(int maxParticipants) {
+        this.maxParticipants = maxParticipants;
+    }
+
+    public ArrayList<String> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(ArrayList<String> participants) {
+        this.participants = participants;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
     @Override
     public String toString() {
         return "Room{" +
@@ -111,6 +139,9 @@ public class Room {
                 ", geohash='" + geohash + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", maxParticipants=" + maxParticipants +
+                ", participants=" + participants +
+                ", host='" + host + '\'' +
                 '}';
     }
 }

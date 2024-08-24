@@ -2,6 +2,7 @@ package syncshack2024.sydney.edu.au.demoapp.model;
 
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,11 +11,11 @@ import java.util.List;
 @IgnoreExtraProperties
 public class User {
     private String uid;
-    private List<String> rooms;
+    private ArrayList<String> rooms;
 
     public User() {}
 
-    public User(String uid, List<String> rooms) {
+    public User(String uid, ArrayList<String> rooms) {
         this.uid = uid;
         this.rooms = rooms;
     }
@@ -27,11 +28,11 @@ public class User {
         this.uid = uid;
     }
 
-    public List<String> getRooms() {
+    public ArrayList<String> getRooms() {
         return rooms;
     }
 
-    public void setRooms(List<String> rooms) {
+    public void setRooms(ArrayList<String> rooms) {
         this.rooms = rooms;
     }
 
