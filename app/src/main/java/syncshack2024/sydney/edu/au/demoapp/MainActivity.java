@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean shouldStartSignIn() {
         //return (!mViewModel.getIsSigningIn() && FirebaseAuth.getInstance().getCurrentUser() == null);
-        Log.i("User ", FirebaseAuth.getInstance().getCurrentUser().toString());
+        //Log.i("User ", FirebaseAuth.getInstance().getCurrentUser().getUid());
         return FirebaseAuth.getInstance().getCurrentUser() == null;
     }
 
