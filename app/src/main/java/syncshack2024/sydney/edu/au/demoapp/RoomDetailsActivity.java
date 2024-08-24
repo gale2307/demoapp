@@ -48,8 +48,8 @@ public class RoomDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_details);
-//        String uid = getIntent().getStringExtra("uid");
-        String uid = "CwM6TVfjyyTaXElIaUgy";
+        String uid = getIntent().getStringExtra("uid");
+//        String uid = "CwM6TVfjyyTaXElIaUgy";
 
         Title = findViewById(R.id.Title);
         StartDate = findViewById(R.id.StartDate);
@@ -62,42 +62,19 @@ public class RoomDetailsActivity extends AppCompatActivity {
         room = new Room();
         readItemsFromDatabase(uid);
 
-//        join_event.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                update_user();
-//            }
-//        });
-//    }
 }
 
     public void onSubmit(View v) {
-//        etItem = (EditText) findViewById(R.id.etEditItem);
-//        spinnerCategory = findViewById(R.id.spinnerCategory);
 
-        // Prepare data intent for sending it back
         Intent data = new Intent();
 
-//        if (item == null) {
-//            item = new Item(0, etItem.getText().toString(), Category.valueOf(spinnerCategory.getSelectedItem().toString()), calendar.getTime(), Boolean.FALSE);
-//        }
 
-//        item.setName(etItem.getText().toString());
-//        item.setCategory(Category.valueOf(spinnerCategory.getSelectedItem().toString()));
-//        item.setDueDate(calendar.getTime());
-
-//        data.putExtra("item", item);
-//        data.putExtra("position", position);
-//        data.putExtra("title", Title.getText().toString());
-//        data.putExtra("latitude", room.getLat());
-//        data.putExtra("title", room.getLng());
         data.putExtra("roomObject", room);
 
         // Activity finishes OK, return the data
         setResult(RESULT_OK, data); // Set result code and bundle data for response
         finish(); // Close the activity, pass data to parent
 
-        // lat lng Room title
     }
 
 
