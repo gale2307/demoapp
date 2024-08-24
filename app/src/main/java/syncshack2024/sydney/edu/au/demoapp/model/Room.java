@@ -24,6 +24,11 @@ public class Room implements Serializable {
 
     public Room() {}
 
+    public Room(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
     public Room(String uid, String title, String description, Date startDate, Date endDate) {
         this.uid = uid;
         this.title = title;
