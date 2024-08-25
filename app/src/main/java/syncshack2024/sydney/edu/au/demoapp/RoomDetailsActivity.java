@@ -77,7 +77,7 @@ public class RoomDetailsActivity extends AppCompatActivity {
     public void onSubmit(View v) {
 
         Intent data = new Intent();
-        data.putExtra("roomObject", room);
+        data.putExtra("didJoin", true);
 
         // Activity finishes OK, return the data
         setResult(RESULT_OK, data); // Set result code and bundle data for response
