@@ -18,8 +18,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.CompletableFuture;
@@ -36,10 +40,9 @@ public class RoomDetailsActivity extends AppCompatActivity {
     private TextView StartDate;
     private TextView EndDate;
     private TextView SportCategory;
+    private Button JoinButton;
     private FirebaseFirestore mFirestore;
     private Room room;
-
-    Button join_event;
 
     @SuppressLint("SimpleDateFormat")
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -48,38 +51,41 @@ public class RoomDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_details);
-        String uid = getIntent().getStringExtra("uid");
-//        String uid = "CwM6TVfjyyTaXElIaUgy";
+//        String title = getIntent().getStringExtra("title");
+        String title = "Test 3";
 
         Title = findViewById(R.id.Title);
         StartDate = findViewById(R.id.StartDate);
         EndDate = findViewById(R.id.EndDate);
         Description = findViewById(R.id.Description);
         SportCategory = findViewById(R.id.SportCategory);
+        JoinButton = findViewById(R.id.btnAddNew);
+//        JoinButton.setVisibility(View.INVISIBLE);
 
         mFirestore = FirestoreUtil.getFirestoreInstance();
 
         room = new Room();
-        readItemsFromDatabase(uid);
+        readItemsFromDatabase(title);
 
 }
+    public void onCancelClick(View v) {
+        finish(); // Close the activity, pass data to parent
+    }
+
+
 
     public void onSubmit(View v) {
 
         Intent data = new Intent();
-
-
         data.putExtra("roomObject", room);
 
         // Activity finishes OK, return the data
         setResult(RESULT_OK, data); // Set result code and bundle data for response
         finish(); // Close the activity, pass data to parent
-
     }
 
 
-
-    private void readItemsFromDatabase(String uid) {
+    private void readItemsFromDatabase(String title) {
         //Use asynchronous task to run query on the background and wait for result
         try {
             // Run a task specified by a Runnable Object asynchronously.
@@ -88,37 +94,41 @@ public class RoomDetailsActivity extends AppCompatActivity {
                 public void run() {
                     //read items from database
                     CollectionReference rooms = mFirestore.collection("rooms_test");
-                    DocumentReference docRef = rooms.document(uid);
-                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    DocumentReference docRef = rooms.document(uid);
+                    Query qry = rooms.whereEqualTo("title", title); //GET w/ filter
+                    qry.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    room = document.toObject(Room.class);
-                                    if (room != null) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    if (document.exists()) {
+                                        room = document.toObject(Room.class);
+                                        if (room != null) {
 
-                                        Title.setText(room.getTitle());
+                                            Title.setText(room.getTitle());
 
-                                        Date startDate = room.getStartDate();
-                                        String startDateString = formatter.format(startDate);
-                                        StartDate.setText(startDateString);
+                                            Date startDate = room.getStartDate();
+                                            String startDateString = formatter.format(startDate);
+                                            StartDate.setText(startDateString);
 
-                                        Date endDate = room.getEndDate();
-                                        String endDateString = formatter.format(endDate);
-                                        EndDate.setText(endDateString);
+                                            Date endDate = room.getEndDate();
+                                            String endDateString = formatter.format(endDate);
+                                            EndDate.setText(endDateString);
 
-                                        String sportsCategory = room.getSportsCategory().toString();
-                                        SportCategory.setText(sportsCategory);
+                                            String sportsCategory = room.getSportsCategory().toString();
+                                            SportCategory.setText(sportsCategory);
 
-                                        String description = room.getDescription();
-                                        Description.setText(description != null ? description : "No description for this event");
+                                            String description = room.getDescription();
+                                            Description.setText(description != null ? description : "No description for this event");
 
+                                            ArrayList<String> users = room.getParticipants();
+
+                                        }
+                                        // adapter notify change
+                                        Log.d("GET - docref", document.getId() + " => " + room.toString());
+                                    } else {
+                                        Log.d("GET - docref", "No such document");
                                     }
-                                    // adapter notify change
-                                    Log.d("GET - docref", document.getId() + " => " + room.toString());
-                                } else {
-                                    Log.d("GET - docref", "No such document");
                                 }
                             } else {
                                 Log.d("GET - docref", "get failed with ", task.getException());
@@ -135,18 +145,4 @@ public class RoomDetailsActivity extends AppCompatActivity {
         }
     }
 
-//    private void displayRoomDetails(Room room) {
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-//
-//        String htmlContent = "<html><body style='padding: 20px;'>" +
-//                "<h1>" + room.getTitle() + "</h1>" +
-//                "<p><strong>Description:</strong> " + room.getDescription() + "</p>" +
-//                "<p><strong>Sport Category:</strong> " + room.getSportsCategory() + "</p>" +
-//                "<p><strong>Latitude:</strong> " + room.getLat() + "</p>" +
-//                "<p><strong>Longitude:</strong> " + room.getLng() + "</p>" +
-//                "<p><strong>Room ID:</strong> " + room.getUid() + "</p>" +
-//                "</body></html>";
-//
-//        webView.loadDataWithBaseURL(null, htmlContent, "text/html", "UTF-8", null);
-//    }
 }
