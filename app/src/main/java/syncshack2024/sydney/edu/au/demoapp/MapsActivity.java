@@ -36,7 +36,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import syncshack2024.sydney.edu.au.demoapp.model.Room;
@@ -51,7 +53,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private ArrayList<Room> allRooms = new ArrayList<>();
     private ArrayList<Room> filteredRooms = new ArrayList<>();
-    private User user;
+    private User user = new User("test1", new ArrayList<>());
+    private Map<Marker, Room> markerRoomMap = new HashMap<>();
 
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -82,7 +85,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     // uncomment below
 //                                    addNewMarker(room.getLat(), room.getLng(), room.getTitle(),
 //                                            sportToHue(room.getSportsCategory()));
-                                    addNewMarker(room.getLat(), room.getLng(), room.getTitle(), 240.0f);
+                                    Marker marker = addNewMarker(room.getLat(), room.getLng(), room.getTitle(), 240.0f);
+                                    markerRoomMap.put(marker, room);
                                     Log.d("GET_item", document.getId() + " => " + room.toString());
                                 }
                                 //
@@ -119,14 +123,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                 LOCATION_PERMISSION_REQUEST_CODE);
 
-        // Find the button by its ID
-        Button createEventButton = findViewById(R.id.create_event_button);
-
-
         readItemsFromDatabase();
 
-        Log.d("hello there", "abc2");
-
+        // Find the button by its ID
+        Button createEventButton = findViewById(R.id.create_event_button);
         // Set an OnClickListener on the button
         createEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,6 +135,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivityForResult(intent, REQUEST_CODE_CREATE_EVENT);
             }
         });
+
+        // Find the button by its ID
+        Button useRoomListActivity = findViewById(R.id.myEventsButton);
+        // Set an OnClickListener on the button
+        useRoomListActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MapsActivity.this, UserRoomListActivity.class);
+                intent.putExtra("allRooms", allRooms);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -149,11 +162,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //            String placeName = data.getStringExtra("selectedPlaceName");
             LatLng placeLatLng = data.getParcelableExtra("selectedPlaceLatLng");
 
-
-            // Add a marker for the selected place
-            if (placeLatLng != null) {
-                addNewMarker(placeLatLng.latitude, placeLatLng.longitude, roomTitle);
-            }
+            Marker marker = addNewMarker(placeLatLng.latitude, placeLatLng.longitude, roomTitle);
 
             // add room to all rooms
             Room r = new Room(roomTitle, roomDescription);
@@ -161,6 +170,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             r.setLat(placeLatLng.latitude);
             r.setLng(placeLatLng.longitude);
             allRooms.add(r);
+            markerRoomMap.put(marker, r);
         }
     }
 
@@ -179,20 +189,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onInfoWindowClick(Marker marker) {
                 // Start a new activity
-                Intent intent = new Intent(MapsActivity.this, DetailActivity.class);
-                intent.putExtra("markerTitle", marker.getTitle());
-                intent.putExtra("markerPosition", marker.getPosition());
+                Intent intent = new Intent(MapsActivity.this, RoomDetailsActivity.class);
+                Log.d("changing window", "1");
+                Room room = markerRoomMap.get(marker);
+                Log.d("changing window", room.toString());
+                intent.putExtra("title", room.getTitle());
+                intent.putExtra("roomObject", room);
                 startActivity(intent);
             }
         });
     }
 
-    private void addNewMarker(double lat, double lng, String title) {
-        addNewMarker(lat, lng, title, BitmapDescriptorFactory.HUE_AZURE);
+    private Marker addNewMarker(double lat, double lng, String title) {
+        return addNewMarker(lat, lng, title, BitmapDescriptorFactory.HUE_AZURE);
     }
 
-    private void addNewMarker(double lat, double lng, String title, float hue) {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(title)
+    private Marker addNewMarker(double lat, double lng, String title, float hue) {
+        return mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(title)
                 .icon(BitmapDescriptorFactory.defaultMarker(hue)));
     }
 
@@ -210,7 +223,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             addNewMarker(room.getLat(), room.getLng(), room.getTitle(), sportToHue(room.getSportsCategory()));
         }
     }
-
 
     private void getDeviceLocation() {
         try {

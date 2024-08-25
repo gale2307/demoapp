@@ -32,10 +32,10 @@
 
         <!-- Button 2 -->
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/myEventsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button 2" />
+            android:text="My events" />
 
         <!-- Button 3 -->
         <Button
