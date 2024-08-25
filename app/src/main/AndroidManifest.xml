@@ -48,6 +48,9 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+        <activity
+            android:name=".RoomDetailsActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
