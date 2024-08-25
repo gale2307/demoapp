@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,6 +38,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FirebaseFirestore mFirestore;
     private static final int REQUEST_CODE_CREATE_EVENT = 1;
     private static final int REQUEST_CODE_ROOM_DETAILS = 2;
+    private static final int REQUEST_CODE_SIGN_IN = 9001;
 
     private void readItemsFromDatabase() {
         //Use asynchronous task to run query on the background and wait for result
@@ -150,6 +154,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // Start sign in if necessary
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            startSignIn();
+            return;
+        }
+
+        // Apply filters
+        // onFilter(mViewModel.getFilters());
+
+        // Start listening for Firestore updates
+        //if (mAdapter != null) {
+        //    mAdapter.startListening();
+        //}
     }
 
     @Override
@@ -272,6 +295,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         }
+    }
+
+    private void startSignIn() {
+        // Sign in with FirebaseUI
+        Intent intent = AuthUI.getInstance().createSignInIntentBuilder()
+                .setAvailableProviders(Collections.singletonList(
+                        new AuthUI.IdpConfig.EmailBuilder().build()))
+                .setIsSmartLockEnabled(false)
+                .build();
+
+        startActivityForResult(intent, REQUEST_CODE_SIGN_IN);
+        //mViewModel.setIsSigningIn(true);
     }
 
 }
