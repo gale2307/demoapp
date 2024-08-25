@@ -5,6 +5,7 @@ import com.google.firebase.firestore.ServerTimestamp;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.io.Serializable;
 
 import syncshack2024.sydney.edu.au.demoapp.enums.SportsCategory;
 

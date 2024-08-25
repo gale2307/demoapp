@@ -1,15 +1,112 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="syncshack2024.sydney.edu.au.demoapp.RoomDetailsActivity" >
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="16dp">
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1">
 
-    <TextView
-        android:id="@+id/textView1"
+        <TableRow>
+            <TextView
+                android:id="@+id/TitleLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title:"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingEnd="16dp"/>
+
+            <TextView
+                android:id="@+id/Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:textSize="18sp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/StartDateLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start Date:"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingEnd="16dp"/>
+
+            <TextView
+                android:id="@+id/StartDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="StartDate"
+                android:textSize="18sp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/EndDateLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="End Date:"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingEnd="16dp"/>
+
+            <TextView
+                android:id="@+id/EndDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EndDate"
+                android:textSize="18sp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/SportCategoryLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category:"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingEnd="16dp"/>
+
+            <TextView
+                android:id="@+id/SportCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SportCategory"
+                android:textSize="18sp"/>
+        </TableRow>
+    </TableLayout>
+
+    <!-- Separate Table Layout for Description -->
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <TableRow>
+            <TextView
+                android:id="@+id/Description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textSize="18sp"
+                android:padding="8dp"/>
+        </TableRow>
+    </TableLayout>
+
+    <Button
+        android:id="@+id/btnAddNew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Title" />
+        android:onClick="onSubmit"
+        android:text="Join"/>
 
 
-</RelativeLayout>
+</LinearLayout>
