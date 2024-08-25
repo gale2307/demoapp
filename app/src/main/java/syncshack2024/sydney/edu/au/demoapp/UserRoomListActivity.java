@@ -49,7 +49,7 @@ public class UserRoomListActivity extends AppCompatActivity {
         mFirestore = FirestoreUtil.getFirestoreInstance();
 
         rooms = new ArrayList<>();
-        ArrayList<String> roomTitles = getIntent().getStringArrayListExtra("titles");
+        ArrayList<String> roomTitles = getIntent().getStringArrayListExtra("allRooms");
         if (roomTitles != null) {
             readRoomsFromDatabase2(roomTitles);
         }

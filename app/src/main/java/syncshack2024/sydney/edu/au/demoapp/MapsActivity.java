@@ -59,8 +59,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location lastKnownLocation;
-    private static final int REQUEST_CODE_CREATE_EVENT = 1;
     private FirebaseFirestore mFirestore;
+    private static final int REQUEST_CODE_CREATE_EVENT = 1;
+    private static final int REQUEST_CODE_ROOM_DETAILS = 2;
 
     private void readItemsFromDatabase() {
         //Use asynchronous task to run query on the background and wait for result
@@ -137,13 +138,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         // Find the button by its ID
-        Button useRoomListActivity = findViewById(R.id.myEventsButton);
+        Button userRoomListActivity = findViewById(R.id.myEventsButton);
         // Set an OnClickListener on the button
-        useRoomListActivity.setOnClickListener(new View.OnClickListener() {
+        userRoomListActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MapsActivity.this, UserRoomListActivity.class);
-                intent.putExtra("allRooms", allRooms);
+                Log.d("my room", user.getRooms().toString());
+                intent.putExtra("allRooms", user.getRooms());
                 startActivity(intent);
             }
         });
@@ -153,6 +155,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == REQUEST_CODE_CREATE_EVENT && resultCode == RESULT_OK) {
             // Get the returned data from CreateEventActivity
 
@@ -171,6 +174,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             r.setLng(placeLatLng.longitude);
             allRooms.add(r);
             markerRoomMap.put(marker, r);
+            user.getRooms().add(roomTitle);
+
+        }
+
+        if (requestCode == REQUEST_CODE_ROOM_DETAILS && resultCode == RESULT_OK) {
+//            Log.d("didJoin", data.getStringExtra("didJoin"));
+            if (data.getBooleanExtra("didJoin", false)) {
+                user.getRooms().add(data.getStringExtra("title"));
+            }
         }
     }
 
@@ -195,7 +207,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.d("changing window", room.toString());
                 intent.putExtra("title", room.getTitle());
                 intent.putExtra("roomObject", room);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_ROOM_DETAILS);
             }
         });
     }
