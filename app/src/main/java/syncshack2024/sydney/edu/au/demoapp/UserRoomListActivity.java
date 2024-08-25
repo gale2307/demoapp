@@ -49,7 +49,10 @@ public class UserRoomListActivity extends AppCompatActivity {
         mFirestore = FirestoreUtil.getFirestoreInstance();
 
         rooms = new ArrayList<>();
-        readRoomsFromDatabase();
+        ArrayList<String> roomTitles = getIntent().getStringArrayListExtra("titles");
+        if (roomTitles != null) {
+            readRoomsFromDatabase2(roomTitles);
+        }
 
         // Create an adapter for the list view using Android's built-in item layout
         roomsAdapter = new RoomAdapter(this, rooms);
@@ -103,6 +106,43 @@ public class UserRoomListActivity extends AppCompatActivity {
                                     User user = document.toObject(User.class);
                                     print_room(user.getRooms());
                                     Log.d("GET", document.getId() + " => " + user.toString());
+                                }
+                            } else {
+                                Log.d("GET", "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+                }
+            });
+            // Block and wait for the future to complete
+            future.get();
+        }
+        catch (Exception ex) {
+            Log.e("readItemsFromDatabase", ex.getStackTrace().toString());
+        }
+    }
+
+    private void readRoomsFromDatabase2(ArrayList<String> titleList) {
+        //Use asynchronous task to run query on the background and wait for result
+        try {
+            // Run a task specified by a Runnable Object asynchronously.
+            CompletableFuture<Void> future = CompletableFuture.runAsync(new Runnable() {
+                @Override
+                public void run() {
+                    //read items from database
+                    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    CollectionReference rooms = mFirestore.collection("rooms_test");
+                    //DocumentReference docRef = users.document(userId);
+                    Query qry = rooms.whereIn("title", titleList);
+                    qry.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Room room = document.toObject(Room.class);  // Room is a custom class
+                                    room.setUid(document.getId());
+                                    roomsAdapter.add(room);
+                                    Log.d("GET", document.getId() + " => " + room.toString());
                                 }
                             } else {
                                 Log.d("GET", "Error getting documents: ", task.getException());
