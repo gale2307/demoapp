@@ -101,6 +101,14 @@
         </TableRow>
     </TableLayout>
 
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"/>
+
     <Button
         android:id="@+id/btnAddNew"
         android:layout_width="wrap_content"

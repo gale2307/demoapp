@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,6 +43,7 @@ public class RoomDetailsActivity extends AppCompatActivity {
     private TextView EndDate;
     private TextView SportCategory;
     private Button JoinButton;
+    private ListView listView;
     private FirebaseFirestore mFirestore;
     private Room room;
 
@@ -51,8 +54,8 @@ public class RoomDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_details);
-        String title = getIntent().getStringExtra("title");
-//        String title = "Test 3";
+//        String title = getIntent().getStringExtra("title");
+        String title = "Test 3";
 
         Title = findViewById(R.id.Title);
         StartDate = findViewById(R.id.StartDate);
@@ -61,7 +64,7 @@ public class RoomDetailsActivity extends AppCompatActivity {
         SportCategory = findViewById(R.id.SportCategory);
         JoinButton = findViewById(R.id.btnAddNew);
 //        JoinButton.setVisibility(View.INVISIBLE);
-
+        listView = findViewById(R.id.listView);
         mFirestore = FirestoreUtil.getFirestoreInstance();
 
         room = new Room();
@@ -78,6 +81,7 @@ public class RoomDetailsActivity extends AppCompatActivity {
 
         Intent data = new Intent();
         data.putExtra("didJoin", true);
+        data.putExtra("title", Title.getText().toString());
 
         // Activity finishes OK, return the data
         setResult(RESULT_OK, data); // Set result code and bundle data for response
@@ -122,6 +126,8 @@ public class RoomDetailsActivity extends AppCompatActivity {
                                             Description.setText(description != null ? description : "No description for this event");
 
                                             ArrayList<String> users = room.getParticipants();
+                                            ArrayAdapter<String> adapter = new ArrayAdapter<>(RoomDetailsActivity.this, android.R.layout.simple_list_item_1, users);
+                                            listView.setAdapter(adapter);
 
                                         }
                                         // adapter notify change
