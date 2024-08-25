@@ -136,6 +136,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        // Find the button by its ID
+        Button useRoomListActivity = findViewById(R.id.myEventsButton);
+        // Set an OnClickListener on the button
+        useRoomListActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MapsActivity.this, UserRoomListActivity.class);
+                intent.putExtra("allRooms", allRooms);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
