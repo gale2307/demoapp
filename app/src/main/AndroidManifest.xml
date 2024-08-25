@@ -51,6 +51,9 @@
         <activity
             android:name=".RoomDetailsActivity"
             android:exported="true" />
+        <activity
+            android:name=".UserRoomListActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
