@@ -51,8 +51,8 @@ public class RoomDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_details);
-//        String title = getIntent().getStringExtra("title");
-        String title = "Test 3";
+        String title = getIntent().getStringExtra("title");
+//        String title = "Test 3";
 
         Title = findViewById(R.id.Title);
         StartDate = findViewById(R.id.StartDate);
