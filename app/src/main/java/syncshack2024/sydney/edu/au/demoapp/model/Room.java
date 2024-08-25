@@ -2,12 +2,13 @@ package syncshack2024.sydney.edu.au.demoapp.model;
 
 import com.google.firebase.firestore.ServerTimestamp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 import syncshack2024.sydney.edu.au.demoapp.enums.SportsCategory;
 
-public class Room {
+public class Room implements Serializable {
     private String uid;
     private String title;
     private String description;
